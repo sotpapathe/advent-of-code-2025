@@ -17,6 +17,7 @@ def maximum_digit(digit_string : str):
 with open(os.path.dirname(os.path.realpath(__file__)) + '/input_sb') as f:
 
     n = 0
+    n2 = 0
 
     for line in f:
         line = line.strip()
@@ -27,5 +28,16 @@ with open(os.path.dirname(os.path.realpath(__file__)) + '/input_sb') as f:
         print(f"line: {line} - {number}")
         n+=number
 
+        # Part 2
+        idx = -1
+        number2 = 0
+        for i in range(12):
+            idx2, digit = maximum_digit(line[idx+1:len(line)-11+i])
+            idx+=idx2+1
+            number2+= int(digit)*10**(11-i)
+        
+        n2+=number2
+
 
     print(f"Total n1: {n}")
+    print(f"Total n2: {n2}")
