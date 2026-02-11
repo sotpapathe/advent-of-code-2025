@@ -23,4 +23,14 @@ for i in ingredients:
             break
 print(num_fresh)
 
-# TODO: part 2: set OOM
+num_fresh_2 = 0
+prev_max = 0
+ranges.sort(key=lambda x: x[0])
+for r in ranges:
+    low = max(r[0], prev_max)
+    high = r[1]
+    prev_max = max(high + 1, prev_max)
+    if high < low:
+        continue
+    num_fresh_2 += high - low + 1
+print(num_fresh_2)
