@@ -28,29 +28,23 @@ bloop = {k: v for k, v in sorted(bloop.items(), key=lambda x: x[0])}
 
 junction_to_circuit = {} # int -> int
 circuit_to_junction = {} # int -> set[int]
-n = 0
-for k in list(bloop.keys())[:1000]:
+for i in range(norms.shape[0]):
+    circuit_to_junction[i] = set([i])
+    junction_to_circuit[i] = i
+for i, k in enumerate(list(bloop.keys())):
     id1, id2 = bloop[k]
     if id1 in junction_to_circuit and id2 in junction_to_circuit:
         cid1 = junction_to_circuit[id1]
         cid2 = junction_to_circuit[id2]
         if cid1 != cid2:
             merge_circuits(circuit_to_junction, junction_to_circuit, cid1, cid2)
-    elif id1 in junction_to_circuit:
-        cid = junction_to_circuit[id1]
-        junction_to_circuit[id2] = cid
-        circuit_to_junction[cid].add(id2)
-    elif id2 in junction_to_circuit:
-        cid = junction_to_circuit[id2]
-        junction_to_circuit[id1] = cid
-        circuit_to_junction[cid].add(id1)
-    else:
-        circuit_to_junction[n] = set([id1, id2])
-        junction_to_circuit[id1] = n
-        junction_to_circuit[id2] = n
-        n += 1
-
-circuit_to_junction = {k: v for k, v in sorted(circuit_to_junction.items(), key=lambda x: len(x[1]))}
-largest = list(circuit_to_junction.items())[-3:]
-n = math.prod([len(x[1]) for x in largest])
-print(n)
+    if i == 999:
+        c2j = {k: v for k, v in sorted(circuit_to_junction.items(), key=lambda x: len(x[1]))}
+        largest = list(c2j.items())[-3:]
+        n = math.prod([len(x[1]) for x in largest])
+        print(n)
+    if len(circuit_to_junction) == 1:
+        x1 = points[id1, 0]
+        x2 = points[id2, 0]
+        print(x1*x2)
+        break
